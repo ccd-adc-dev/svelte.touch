@@ -82,35 +82,29 @@ const pathsDrag = [
 const Drag = () => {
   interact(itemDrag).draggable({
     inertia: true,
-    cursorChecker: (action, interatable, element, interacting) => {
-      switch (action.axis) {
-        case 'x': return 'ew-resize'
-        case 'y': return 'ns-resize'
-        default: return interacting ? 'grabbing' : 'grab'
-      }
-    },
     modifiers: [
       interact.modifiers.restrictRect({
-        restriction: 'body',
+        restriction: 'svg',
         endOnly: true
       })
     ],
     // autoScroll: true,
     onmove: dragMoveListener,
     onend: (e) => {
+      e.target.style.fill = colorDrag// area
       console.log('Fin')
     }
 
   })
 }
 
-const dragMoveListener = (event) => {
+const dragMoveListener = (e) => {
 
-  let target = event.target
+  let target = e.target
   console.log("Moviendo: ")
   // aplica los valores en los atributos data-
-  var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-  var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+  var x = (parseFloat(target.getAttribute('data-x')) || 0) + e.dx
+  var y = (parseFloat(target.getAttribute('data-y')) || 0) + e.dy
   // translate the element
   target.style.webkitTransform =
   target.style.transform =
@@ -125,122 +119,81 @@ const Drop = (interactObj, acceptObj) => {
 
   interact(interactObj).dropzone({
     accept: acceptObj,
-    overlap: 0.20,
+    overlap: 0.10,//10% encima del area
     // Eventos relacionados al 'drop':
-    ondropactivate: (event) => {
-      event.target.style.fill = colorDragging// area
-      event.relatedTarget.style.fill = colorDragging//dragged obj
+    ondropactivate: (e) => {
+      e.target.style.fill = colorDragging// area
+      e.relatedTarget.style.fill = colorDragging//dragged obj
     },
-    //     //al entrar en zona de 'drop'
-    ondragenter: (event) => {
-      event.target.style.fill = colorEnterArea
-      event.relatedTarget.style.fill = colorEnterArea
+    // Al entrar en zona de 'drop'
+    ondragenter: (e) => {
+      e.target.style.fill = colorEnterArea
+      e.relatedTarget.style.fill = colorEnterArea
     },
-    //     //al soltarlo dentro de la zona de 'drop'
-    ondrop: (event) => {
-      let dropzone = event.target.getBoundingClientRect()
-      let obj = event.relatedTarget
+    // Al soltarlo dentro de la zona de 'drop'
+    ondrop: (e) => {
+      let dropzone = e.target.getBoundingClientRect()
+      let obj = e.relatedTarget
+      let x = dropzone.x*0.001
+      let y = dropzone.y*0.001
       // snap
       obj.style.webkitTransform =
       obj.style.transform =
-      'translate(' + dropzone.left + 'px, ' + dropzone.bottom    + 'px)'
+      'translate(' + x + 'px, ' + y    + 'px)'
+      obj.setAttribute('data-x', x)
+      obj.setAttribute('data-y', y)
       //
-      obj.setAttribute('data-x', dropzone.left)
-      obj.setAttribute('data-y', dropzone.bottom)
-      console.log(dropzone)
-      console.log(dropzone.x)
-      console.log(dropzone.y)
+      e.target.style.fill = colorSnapped
+      e.relatedTarget.style.fill = colorSnapped
     },
-    //     //Al salir del 'dropzone'
-    ondragleave: (event) => {
-      event.target.style.fill = colorArea
-      event.relatedTarget.style.fill = colorDrag
+    //Al salir del 'dropzone'
+    ondragleave: (e) => {
+      e.target.style.fill = colorDragging
+      e.relatedTarget.style.fill = colorDragging
     },
     // Al dejar fuera de la zona de 'drop'
-    ondropdeactivate: (event) => {
-      event.target.style.fill = colorArea// area
-      event.relatedTarget.style.fill = colorDrag//dragged obj
+    ondropdeactivate: (e) => {
+      e.target.style.fill = colorArea// area
     }
   })
+}
+
+function areaPos(e) {
+  console.log(e);
 }
 //llamadas
 resize()
 Drag()
 Drop("#cuadrado-area",'#cuadrado-drag')
+Drop("#triangulo-area",'#triangulo-drag')
+Drop("#irregular-area",'#irregular-drag')
+Drop("#circulo-area",'#circulo-drag')
 //
 </script>
 <!-- Estilos -->
 <style>
-:root {
-  --color-obj: #0169B1;
-  --color-obj-dropped: #8BBE42;
-  --color-area: #86378B;
-  --color-area-active: #D63A87;
-}
 * {
-  outline: 1px solid black;
-}
-/*  */
-body {
-  padding: 0;
+  /* outline: 1px solid black; */
 }
 #svg-contenedor {
   height: 100vh;
   width: 100vw;
 }
-path {
-  height: 80px;
-  width: 80px;
-}
-.dragall {
-  /* position: fixed; */
-  height: 150px;
-  width: 150px;
-  z-index: 100;
-}
-.dropall {
-  position: fixed;
-  height: 150px;
-  width: 150px;
-}
-.drop-1 {
-  top: 64px;
-  left: 64px;
-}
-.drop-2 {
-  top: 64px;
-  right: 64px;
-}
-.drop-3 {
-  bottom: 64px;
-  left: 64px;
-}
-.drop-4 {
-  bottom: 64px;
-  right: 64px;
-}
-/*  */
-.info {
-  text-align: center;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-
 </style>
 <!-- HTML  -->
 <section>
 <!--  -->
 <svg id="svg-contenedor" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-preserveAspectRatio="xMidYMid meet"
 viewBox={`0 0 ${width} ${height}`}
 width={`${width}px`}
 height={`${height}px`}
 >
 <!-- Drops Areas -->
 {#each pathsDrop as path}
+
+<!-- on:create={areaPos()} -->
 <path
+on:create={event => created = event.target}
 d={path.d}
 id={path.id}
 class={path.class}
@@ -252,6 +205,7 @@ fill={path.fill}
 
 <!-- draggables -->
 {#each pathsDrag as path}
+
 <path
 d={path.d}
 id={path.id}
@@ -259,6 +213,9 @@ class={path.class}
 opacity={path.opacity}
 fill={path.fill}
 ></path>
+
 {/each}
+
 </svg>
+
 </section>

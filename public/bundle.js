@@ -52,6 +52,10 @@ var app = (function () {
     function empty() {
         return text('');
     }
+    function listen(node, event, handler, options) {
+        node.addEventListener(event, handler, options);
+        return () => node.removeEventListener(event, handler, options);
+    }
     function attr(node, attribute, value) {
         if (value == null)
             node.removeAttribute(attribute);
@@ -309,6 +313,19 @@ var app = (function () {
     function detach_dev(node) {
         dispatch_dev("SvelteDOMRemove", { node });
         detach(node);
+    }
+    function listen_dev(node, event, handler, options, has_prevent_default, has_stop_propagation) {
+        const modifiers = options === true ? ["capture"] : options ? Array.from(Object.keys(options)) : [];
+        if (has_prevent_default)
+            modifiers.push('preventDefault');
+        if (has_stop_propagation)
+            modifiers.push('stopPropagation');
+        dispatch_dev("SvelteDOMAddEventListener", { node, event, handler, modifiers });
+        const dispose = listen(node, event, handler, options);
+        return () => {
+            dispatch_dev("SvelteDOMRemoveEventListener", { node, event, handler, modifiers });
+            dispose();
+        };
     }
     function attr_dev(node, attribute, value) {
         attr(node, attribute, value);
@@ -10062,19 +10079,20 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (242:0) {#each pathsDrop as path}
+    // (192:0) {#each pathsDrop as path}
     function create_each_block_1(ctx) {
-    	var path;
+    	var path, dispose;
 
     	const block = {
     		c: function create() {
     			path = svg_element("path");
     			attr_dev(path, "d", ctx.path.d);
     			attr_dev(path, "id", ctx.path.id);
-    			attr_dev(path, "class", "" + ctx.path.class + " svelte-1sqdqz3");
+    			attr_dev(path, "class", "" + ctx.path.class + " svelte-719o7u");
     			attr_dev(path, "opacity", ctx.path.opacity);
     			attr_dev(path, "fill", ctx.path.fill);
-    			add_location(path, file, 242, 0, 5913);
+    			add_location(path, file, 194, 0, 5163);
+    			dispose = listen_dev(path, "create", ctx.create_handler);
     		},
 
     		m: function mount(target, anchor) {
@@ -10087,13 +10105,15 @@ var app = (function () {
     			if (detaching) {
     				detach_dev(path);
     			}
+
+    			dispose();
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_1.name, type: "each", source: "(242:0) {#each pathsDrop as path}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_1.name, type: "each", source: "(192:0) {#each pathsDrop as path}", ctx });
     	return block;
     }
 
-    // (254:0) {#each pathsDrag as path}
+    // (207:0) {#each pathsDrag as path}
     function create_each_block(ctx) {
     	var path;
 
@@ -10102,10 +10122,10 @@ var app = (function () {
     			path = svg_element("path");
     			attr_dev(path, "d", ctx.path.d);
     			attr_dev(path, "id", ctx.path.id);
-    			attr_dev(path, "class", "" + ctx.path.class + " svelte-1sqdqz3");
+    			attr_dev(path, "class", "" + ctx.path.class + " svelte-719o7u");
     			attr_dev(path, "opacity", ctx.path.opacity);
     			attr_dev(path, "fill", ctx.path.fill);
-    			add_location(path, file, 254, 0, 6067);
+    			add_location(path, file, 208, 0, 5362);
     		},
 
     		m: function mount(target, anchor) {
@@ -10120,7 +10140,7 @@ var app = (function () {
     			}
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block.name, type: "each", source: "(254:0) {#each pathsDrag as path}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block.name, type: "each", source: "(207:0) {#each pathsDrag as path}", ctx });
     	return block;
     }
 
@@ -10161,14 +10181,13 @@ var app = (function () {
     			attr_dev(svg, "version", "1.1");
     			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg, "xmlns:xlink", "http://www.w3.org/1999/xlink");
-    			attr_dev(svg, "preserveAspectRatio", "xMidYMid meet");
     			attr_dev(svg, "viewBox", svg_viewBox_value = `0 0 ${ctx.width} ${ctx.height}`);
     			attr_dev(svg, "width", svg_width_value = `${ctx.width}px`);
     			attr_dev(svg, "height", svg_height_value = `${ctx.height}px`);
-    			attr_dev(svg, "class", "svelte-1sqdqz3");
-    			add_location(svg, file, 234, 0, 5632);
-    			attr_dev(section, "class", "svelte-1sqdqz3");
-    			add_location(section, file, 232, 0, 5612);
+    			attr_dev(svg, "class", "svelte-719o7u");
+    			add_location(svg, file, 185, 0, 4886);
+    			attr_dev(section, "class", "svelte-719o7u");
+    			add_location(section, file, 183, 0, 4866);
     		},
 
     		l: function claim(nodes) {
@@ -10275,6 +10294,8 @@ var app = (function () {
 
     const colorEnterArea = 'lightgray';
 
+    const colorSnapped = 'gray';
+
     function instance($$self, $$props, $$invalidate) {
     	
     const resize = () => {
@@ -10348,35 +10369,29 @@ var app = (function () {
     const Drag = () => {
       interact$1(itemDrag).draggable({
         inertia: true,
-        cursorChecker: (action, interatable, element, interacting) => {
-          switch (action.axis) {
-            case 'x': return 'ew-resize'
-            case 'y': return 'ns-resize'
-            default: return interacting ? 'grabbing' : 'grab'
-          }
-        },
         modifiers: [
           interact$1.modifiers.restrictRect({
-            restriction: 'body',
+            restriction: 'svg',
             endOnly: true
           })
         ],
         // autoScroll: true,
         onmove: dragMoveListener,
         onend: (e) => {
+          e.target.style.fill = colorDrag;// area
           console.log('Fin');
         }
 
       });
     };
 
-    const dragMoveListener = (event) => {
+    const dragMoveListener = (e) => {
 
-      let target = event.target;
+      let target = e.target;
       console.log("Moviendo: ");
       // aplica los valores en los atributos data-
-      var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-      var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+      var x = (parseFloat(target.getAttribute('data-x')) || 0) + e.dx;
+      var y = (parseFloat(target.getAttribute('data-y')) || 0) + e.dy;
       // translate the element
       target.style.webkitTransform =
       target.style.transform =
@@ -10391,41 +10406,41 @@ var app = (function () {
 
       interact$1(interactObj).dropzone({
         accept: acceptObj,
-        overlap: 0.20,
+        overlap: 0.10,//10% encima del area
         // Eventos relacionados al 'drop':
-        ondropactivate: (event) => {
-          event.target.style.fill = colorDragging;// area
-          event.relatedTarget.style.fill = colorDragging;//dragged obj
+        ondropactivate: (e) => {
+          e.target.style.fill = colorDragging;// area
+          e.relatedTarget.style.fill = colorDragging;//dragged obj
         },
-        //     //al entrar en zona de 'drop'
-        ondragenter: (event) => {
-          event.target.style.fill = colorEnterArea;
-          event.relatedTarget.style.fill = colorEnterArea;
+        // Al entrar en zona de 'drop'
+        ondragenter: (e) => {
+          e.target.style.fill = colorEnterArea;
+          e.relatedTarget.style.fill = colorEnterArea;
         },
-        //     //al soltarlo dentro de la zona de 'drop'
-        ondrop: (event) => {
-          let dropzone = event.target.getBoundingClientRect();
-          let obj = event.relatedTarget;
+        // Al soltarlo dentro de la zona de 'drop'
+        ondrop: (e) => {
+          let dropzone = e.target.getBoundingClientRect();
+          let obj = e.relatedTarget;
+          let x = dropzone.x*0.001;
+          let y = dropzone.y*0.001;
           // snap
           obj.style.webkitTransform =
           obj.style.transform =
-          'translate(' + dropzone.left + 'px, ' + dropzone.bottom    + 'px)';
+          'translate(' + x + 'px, ' + y    + 'px)';
+          obj.setAttribute('data-x', x);
+          obj.setAttribute('data-y', y);
           //
-          obj.setAttribute('data-x', dropzone.left);
-          obj.setAttribute('data-y', dropzone.bottom);
-          console.log(dropzone);
-          console.log(dropzone.x);
-          console.log(dropzone.y);
+          e.target.style.fill = colorSnapped;
+          e.relatedTarget.style.fill = colorSnapped;
         },
-        //     //Al salir del 'dropzone'
-        ondragleave: (event) => {
-          event.target.style.fill = colorArea;
-          event.relatedTarget.style.fill = colorDrag;
+        //Al salir del 'dropzone'
+        ondragleave: (e) => {
+          e.target.style.fill = colorDragging;
+          e.relatedTarget.style.fill = colorDragging;
         },
         // Al dejar fuera de la zona de 'drop'
-        ondropdeactivate: (event) => {
-          event.target.style.fill = colorArea;// area
-          event.relatedTarget.style.fill = colorDrag;//dragged obj
+        ondropdeactivate: (e) => {
+          e.target.style.fill = colorArea;// area
         }
       });
     };
@@ -10433,7 +10448,12 @@ var app = (function () {
     resize();
     Drag();
     Drop("#cuadrado-area",'#cuadrado-drag');
+    Drop("#triangulo-area",'#triangulo-drag');
+    Drop("#irregular-area",'#irregular-drag');
+    Drop("#circulo-area",'#circulo-drag');
     //
+
+    	const create_handler = (event) => created = event.target;
 
     	$$self.$capture_state = () => {
     		return {};
@@ -10449,7 +10469,13 @@ var app = (function () {
     	$$invalidate('width', width = window.innerWidth);
     	$$invalidate('height', height = window.innerHeight);
 
-    	return { pathsDrop, pathsDrag, width, height };
+    	return {
+    		pathsDrop,
+    		pathsDrag,
+    		width,
+    		height,
+    		create_handler
+    	};
     }
 
     class DragDrop extends SvelteComponentDev {
