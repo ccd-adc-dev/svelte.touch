@@ -11,6 +11,12 @@ const resize = () => {
   }
 }
 const itemDrag = '.dragall'
+// colores
+const colorDrag = 'red'
+const colorDragging = 'pink'
+const colorArea = 'purple'
+const colorSnapped = 'gray'
+
 // PATHS:
 const pathsDrop = [
   {
@@ -18,28 +24,28 @@ const pathsDrop = [
     class: "drop-1 dropall",
     d: "M532.65 254.94C532.65 352.36 453.56 431.45 356.14 431.45C258.73 431.45 179.64 352.36 179.64 254.94C179.64 157.52 258.73 78.43 356.14 78.43C453.56 78.43 532.65 157.52 532.65 254.94Z",
     opacity:"1",
-    fill: "#651e48"
+    fill: colorArea
   },
   {
     id: "triangulo-area",
     class: "drop-2 dropall",
     d: "M426.63 374.82L180.84 377.23L300.12 86.87L426.63 374.82Z",
     opacity:"1",
-    fill: "#651e48"
+    fill: colorArea
   },
   {
     id: "irregular-area",
     class: "drop-3 dropall",
     d: "M473.61 66.39L437.47 172.41L433.86 219.4L324.22 239.88L403.73 272.41L349.52 285.66L339.88 342.29L282.05 304.94L274.82 355.54L236.27 300.12L207.35 219.4L232.65 133.86L473.61 66.39Z",
     opacity:"1",
-    fill: "#651e48"
+    fill: colorArea
   },
   {
     id: "cuadrado-area",
     class: "drop-4 dropall",
     d: "M112.17 79.64L495.3 79.64L495.3 459.16L112.17 459.16L112.17 79.64Z",
     opacity:"1",
-    fill: "#651e48"
+    fill: colorArea
   }
 ]
 const pathsDrag = [
@@ -48,28 +54,28 @@ const pathsDrag = [
     class: "dragall",
     d: "M532.65 254.94C532.65 352.36 453.56 431.45 356.14 431.45C258.73 431.45 179.64 352.36 179.64 254.94C179.64 157.52 258.73 78.43 356.14 78.43C453.56 78.43 532.65 157.52 532.65 254.94Z",
     opacity:"1",
-    fill: "#659f18"
+    fill: colorDrag
   },
   {
     id: "triangulo-drag",
     class: "dragall",
     d: "M426.63 374.82L180.84 377.23L300.12 86.87L426.63 374.82Z",
     opacity:"1",
-    fill: "#659f18"
+    fill: colorDrag
   },
   {
     id: "irregular-drag",
     class: "dragall",
     d: "M473.61 66.39L437.47 172.41L433.86 219.4L324.22 239.88L403.73 272.41L349.52 285.66L339.88 342.29L282.05 304.94L274.82 355.54L236.27 300.12L207.35 219.4L232.65 133.86L473.61 66.39Z",
     opacity:"1",
-    fill: "#659f18"
+    fill: colorDrag
   },
   {
     id: "cuadrado-drag",
     class: "dragall",
     d: "M112.17 79.64L495.3 79.64L495.3 459.16L112.17 459.16L112.17 79.64Z",
     opacity:"1",
-    fill: "#659f18"
+    fill: colorDrag
   }
 ]
 
@@ -123,10 +129,11 @@ const dropPos = [
   {x:0, y: 0},
   {x:0, y: 0}
 ]
-let pathdrop
 //
 const Drop = (interactObj, acceptObj) => {
 
+  let iObj = document.querySelector(interactObj)
+  console.log(iObj)
   // DEBUG: refactorizar
   //   const obj = document.querySelector(acceptObj)
   //   const contObj = document.querySelector(interactObj)
@@ -137,54 +144,63 @@ const Drop = (interactObj, acceptObj) => {
   //   //
   //   const info = document.querySelector('.info')
   //   //
-  //   interact(interactObj).dropzone({
-  //     accept: acceptObj,
-  //     // Requiere el 15% del elemento para ejercer el 'drop'
-  //     overlap: 0.15,
-  //     // Eventos relacionados al 'drop':
-  //     ondropactivate: (event) => {
-  //       event.target.querySelector('path').style.fill = colorAreaActive
-  //       event.relatedTarget.querySelector('path').style.fill = colorAreaActive
-  //       info.innerHTML = "DEBUG: ondropactive"
-  //     },
-  //     //al entrar en zona de 'drop'
-  //     ondragenter: (event) => {
-  //       event.target.querySelector('path').style.fill = colorObjDropped
-  //       info.innerHTML = "DEBUG: ondragenter"
-  //     },
-  //     //al soltarlo dentro de la zona de 'drop'
-  //     ondrop: (event) => {
-  //       let dropzone = event.target.getBoundingClientRect()
-  //       // // snap
-  //       obj.style.webkitTransform =
-  //       obj.style.transform =
-  //       'translate(' + dropzone.x + 'px, ' + dropzone.y    + 'px)'
-  //       //
-  //       obj.setAttribute('data-x', dropzone.x)
-  //       obj.setAttribute('data-y', dropzone.y)
-  //
-  //       info.innerHTML = "DEBUG: ondrop"
-  //     },
-  //     //Al salir del 'dropzone'
-  //     ondragleave: (event) => {
-  //       event.target.querySelector('path').style.fill = colorAreaActive
-  //       info.innerHTML = "DEBUG: ondragleave"
-  //     },
-  //     // Al dejar fuera de la zona de 'drop'
-  //     ondropdeactivate: (event) => {
-  //       event.target.querySelector('path').style.fill = colorArea
-  //       event.relatedTarget.querySelector('path').style.fill = colorObj
-  //       info.innerHTML = "DEBUG: ondropdeactivate"
-  //     }
-  //   })
-  //
-  // }
-  //
+  interact(interactObj).dropzone({
+    accept: acceptObj,
+    //     // Requiere el 15% del elemento para ejercer el 'drop'
+    overlap: 0.15,
+    //     // Eventos relacionados al 'drop':
+    ondropactivate: (event) => {
+      // event.target.querySelector('path').style.fill = colorAreaActive
+      // event.relatedTarget.querySelector('path').style.fill = colorAreaActive
+      // event.target.style.fill = 'red'// area
+      // event.relatedTarget.style.fill = 'lime'//dragged obj
+      console.log("ondropactive: ",event)
+    },
+    //     //al entrar en zona de 'drop'
+    ondragenter: (event) => {
+      //       event.target.querySelector('path').style.fill = colorObjDropped
+      //       info.innerHTML = "DEBUG: ondragenter"
+      event.target.style.fill = 'red'// area
+      event.relatedTarget.style.fill = 'lime'//dragged obj
+      // console.log("ondragenter")
+    },
+    //     //al soltarlo dentro de la zona de 'drop'
+    ondrop: (event) => {
+      //       let dropzone = event.target.getBoundingClientRect()
+      //       // // snap
+      //       obj.style.webkitTransform =
+      //       obj.style.transform =
+      //       'translate(' + dropzone.x + 'px, ' + dropzone.y    + 'px)'
+      //       //
+      //       obj.setAttribute('data-x', dropzone.x)
+      //       obj.setAttribute('data-y', dropzone.y)
+      //
+      //       info.innerHTML = "DEBUG: ondrop"
+      // console.log("ondrop")
+    },
+    //     //Al salir del 'dropzone'
+    ondragleave: (event) => {
+      //       event.target.querySelector('path').style.fill = colorAreaActive
+      //       info.innerHTML = "DEBUG: ondragleave"
+      event.target.style.fill = 'purple'// area
+      event.relatedTarget.style.fill = 'green'//dragged obj
+      // console.log("ondrop")
+    },
+    //     // Al dejar fuera de la zona de 'drop'
+        ondropdeactivate: (event) => {
+    //       event.target.querySelector('path').style.fill = colorArea
+    //       event.relatedTarget.querySelector('path').style.fill = colorObj
+    //       info.innerHTML = "DEBUG: ondropdeactivate"
+    event.target.style.fill = 'purple'// area
+    event.relatedTarget.style.fill = 'green'//dragged obj
+    // console.log("ondropdeactivate")
+        }
+  })
 }
 //llamadas
 resize()
 Drag()
-// Drop()
+Drop("#cuadrado-area",'#cuadrado-drag')
 //
 </script>
 <!-- Estilos -->
@@ -257,9 +273,8 @@ width={`${width}px`}
 height={`${height}px`}
 >
 <!-- Drops Areas -->
-{#each pathsDrop as path,i}
+{#each pathsDrop as path}
 <path
-bind:this={pathdrop}
 d={path.d}
 id={path.id}
 class={path.class}
@@ -280,5 +295,4 @@ fill={path.fill}
 ></path>
 {/each}
 </svg>
-
 </section>
