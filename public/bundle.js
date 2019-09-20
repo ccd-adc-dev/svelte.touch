@@ -34,11 +34,23 @@ var app = (function () {
     function detach(node) {
         node.parentNode.removeChild(node);
     }
+    function destroy_each(iterations, detaching) {
+        for (let i = 0; i < iterations.length; i += 1) {
+            if (iterations[i])
+                iterations[i].d(detaching);
+        }
+    }
     function element(name) {
         return document.createElement(name);
     }
     function svg_element(name) {
         return document.createElementNS('http://www.w3.org/2000/svg', name);
+    }
+    function text(data) {
+        return document.createTextNode(data);
+    }
+    function empty() {
+        return text('');
     }
     function attr(node, attribute, value) {
         if (value == null)
@@ -10029,7 +10041,7 @@ var app = (function () {
     });
 
 
-
+    //# sourceMappingURL=interact.js.map
     });
 
     var interact$1 = unwrapExports(interact);
@@ -10038,71 +10050,117 @@ var app = (function () {
 
     const file = "src/componentes/DragDrop.svelte";
 
+    function get_each_context(ctx, list, i) {
+    	const child_ctx = Object.create(ctx);
+    	child_ctx.path = list[i];
+    	return child_ctx;
+    }
+
+    function get_each_context_1(ctx, list, i) {
+    	const child_ctx = Object.create(ctx);
+    	child_ctx.path = list[i];
+    	child_ctx.i = i;
+    	return child_ctx;
+    }
+
+    // (260:0) {#each pathsDrop as path,i}
+    function create_each_block_1(ctx) {
+    	var path;
+
+    	const block = {
+    		c: function create() {
+    			path = svg_element("path");
+    			attr_dev(path, "d", ctx.path.d);
+    			attr_dev(path, "id", ctx.path.id);
+    			attr_dev(path, "class", "" + ctx.path.class + " svelte-1sqdqz3");
+    			attr_dev(path, "opacity", ctx.path.opacity);
+    			attr_dev(path, "fill", ctx.path.fill);
+    			add_location(path, file, 260, 0, 6514);
+    		},
+
+    		m: function mount(target, anchor) {
+    			insert_dev(target, path, anchor);
+    			ctx.path_binding(path);
+    		},
+
+    		p: noop,
+
+    		d: function destroy(detaching) {
+    			if (detaching) {
+    				detach_dev(path);
+    			}
+
+    			ctx.path_binding(null);
+    		}
+    	};
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_1.name, type: "each", source: "(260:0) {#each pathsDrop as path,i}", ctx });
+    	return block;
+    }
+
+    // (273:0) {#each pathsDrag as path}
+    function create_each_block(ctx) {
+    	var path;
+
+    	const block = {
+    		c: function create() {
+    			path = svg_element("path");
+    			attr_dev(path, "d", ctx.path.d);
+    			attr_dev(path, "id", ctx.path.id);
+    			attr_dev(path, "class", "" + ctx.path.class + " svelte-1sqdqz3");
+    			attr_dev(path, "opacity", ctx.path.opacity);
+    			attr_dev(path, "fill", ctx.path.fill);
+    			add_location(path, file, 273, 0, 6689);
+    		},
+
+    		m: function mount(target, anchor) {
+    			insert_dev(target, path, anchor);
+    		},
+
+    		p: noop,
+
+    		d: function destroy(detaching) {
+    			if (detaching) {
+    				detach_dev(path);
+    			}
+    		}
+    	};
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block.name, type: "each", source: "(273:0) {#each pathsDrag as path}", ctx });
+    	return block;
+    }
+
     function create_fragment(ctx) {
-    	var section, svg, path0, path1, path2, path3, path4, path5, path6, path7, svg_viewBox_value, svg_width_value, svg_height_value;
+    	var section, svg, each0_anchor, svg_viewBox_value, svg_width_value, svg_height_value;
+
+    	let each_value_1 = ctx.pathsDrop;
+
+    	let each_blocks_1 = [];
+
+    	for (let i = 0; i < each_value_1.length; i += 1) {
+    		each_blocks_1[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
+    	}
+
+    	let each_value = ctx.pathsDrag;
+
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+    	}
 
     	const block = {
     		c: function create() {
     			section = element("section");
     			svg = svg_element("svg");
-    			path0 = svg_element("path");
-    			path1 = svg_element("path");
-    			path2 = svg_element("path");
-    			path3 = svg_element("path");
-    			path4 = svg_element("path");
-    			path5 = svg_element("path");
-    			path6 = svg_element("path");
-    			path7 = svg_element("path");
-    			attr_dev(path0, "d", "M532.65 254.94C532.65 352.36 453.56 431.45 356.14 431.45C258.73 431.45 179.64 352.36 179.64 254.94C179.64 157.52 258.73 78.43 356.14 78.43C453.56 78.43 532.65 157.52 532.65 254.94Z");
-    			attr_dev(path0, "id", "circulo-area");
-    			attr_dev(path0, "class", "drop-1 dropall svelte-10hxw3t");
-    			attr_dev(path0, "opacity", "1");
-    			attr_dev(path0, "fill", "#651e48");
-    			add_location(path0, file, 182, 0, 4432);
-    			attr_dev(path1, "d", "M112.17 79.64L495.3 79.64L495.3 459.16L112.17 459.16L112.17 79.64Z");
-    			attr_dev(path1, "id", "cuadrado-area");
-    			attr_dev(path1, "class", "drop-2 dropall svelte-10hxw3t");
-    			attr_dev(path1, "opacity", "1");
-    			attr_dev(path1, "fill", "#1d5299");
-    			add_location(path1, file, 189, 0, 4700);
-    			attr_dev(path2, "d", "M473.61 66.39L437.47 172.41L433.86 219.4L324.22 239.88L403.73 272.41L349.52 285.66L339.88 342.29L282.05 304.94L274.82 355.54L236.27 300.12L207.35 219.4L232.65 133.86L473.61 66.39Z");
-    			attr_dev(path2, "id", "irregular-area");
-    			attr_dev(path2, "class", "drop-3 dropall svelte-10hxw3t");
-    			attr_dev(path2, "opacity", "1");
-    			attr_dev(path2, "fill", "#b06508");
-    			add_location(path2, file, 195, 0, 4855);
-    			attr_dev(path3, "d", "M426.63 374.82L180.84 377.23L300.12 86.87L426.63 374.82Z");
-    			attr_dev(path3, "id", "triangulo-area");
-    			attr_dev(path3, "class", "drop-4 dropall svelte-10hxw3t");
-    			attr_dev(path3, "opacity", "1");
-    			attr_dev(path3, "fill", "#469216");
-    			attr_dev(path3, "width", "500");
-    			attr_dev(path3, "height", "500");
-    			add_location(path3, file, 201, 0, 5124);
-    			attr_dev(path4, "d", "M532.65 254.94C532.65 352.36 453.56 431.45 356.14 431.45C258.73 431.45 179.64 352.36 179.64 254.94C179.64 157.52 258.73 78.43 356.14 78.43C453.56 78.43 532.65 157.52 532.65 254.94Z");
-    			attr_dev(path4, "id", "circulo-drag");
-    			attr_dev(path4, "class", "dragall svelte-10hxw3t");
-    			attr_dev(path4, "opacity", "1");
-    			attr_dev(path4, "fill", "#1c5a35");
-    			add_location(path4, file, 213, 0, 5334);
-    			attr_dev(path5, "d", "M112.17 79.64L495.3 79.64L495.3 459.16L112.17 459.16L112.17 79.64Z");
-    			attr_dev(path5, "id", "cuadrado-drag");
-    			attr_dev(path5, "class", "dragall svelte-10hxw3t");
-    			attr_dev(path5, "opacity", "1");
-    			attr_dev(path5, "fill", "#1d5299");
-    			add_location(path5, file, 221, 0, 5614);
-    			attr_dev(path6, "d", "M473.61 66.39L437.47 172.41L433.86 219.4L324.22 239.88L403.73 272.41L349.52 285.66L339.88 342.29L282.05 304.94L274.82 355.54L236.27 300.12L207.35 219.4L232.65 133.86L473.61 66.39Z");
-    			attr_dev(path6, "id", "irregular-drag");
-    			attr_dev(path6, "class", "dragall svelte-10hxw3t");
-    			attr_dev(path6, "opacity", "1");
-    			attr_dev(path6, "fill", "#b06508");
-    			add_location(path6, file, 228, 0, 5781);
-    			attr_dev(path7, "d", "M426.63 374.82L180.84 377.23L300.12 86.87L426.63 374.82Z");
-    			attr_dev(path7, "id", "triangulo-drag");
-    			attr_dev(path7, "class", "dragall svelte-10hxw3t");
-    			attr_dev(path7, "opacity", "1");
-    			attr_dev(path7, "fill", "#469216");
-    			add_location(path7, file, 235, 0, 6062);
+
+    			for (let i = 0; i < each_blocks_1.length; i += 1) {
+    				each_blocks_1[i].c();
+    			}
+
+    			each0_anchor = empty();
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
     			attr_dev(svg, "id", "svg-contenedor");
     			attr_dev(svg, "version", "1.1");
     			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
@@ -10111,10 +10169,10 @@ var app = (function () {
     			attr_dev(svg, "viewBox", svg_viewBox_value = `0 0 ${ctx.width} ${ctx.height}`);
     			attr_dev(svg, "width", svg_width_value = `${ctx.width}px`);
     			attr_dev(svg, "height", svg_height_value = `${ctx.height}px`);
-    			attr_dev(svg, "class", "svelte-10hxw3t");
-    			add_location(svg, file, 174, 0, 4155);
-    			attr_dev(section, "class", "svelte-10hxw3t");
-    			add_location(section, file, 172, 0, 4135);
+    			attr_dev(svg, "class", "svelte-1sqdqz3");
+    			add_location(svg, file, 252, 0, 6231);
+    			attr_dev(section, "class", "svelte-1sqdqz3");
+    			add_location(section, file, 250, 0, 6211);
     		},
 
     		l: function claim(nodes) {
@@ -10124,17 +10182,63 @@ var app = (function () {
     		m: function mount(target, anchor) {
     			insert_dev(target, section, anchor);
     			append_dev(section, svg);
-    			append_dev(svg, path0);
-    			append_dev(svg, path1);
-    			append_dev(svg, path2);
-    			append_dev(svg, path3);
-    			append_dev(svg, path4);
-    			append_dev(svg, path5);
-    			append_dev(svg, path6);
-    			append_dev(svg, path7);
+
+    			for (let i = 0; i < each_blocks_1.length; i += 1) {
+    				each_blocks_1[i].m(svg, null);
+    			}
+
+    			append_dev(svg, each0_anchor);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(svg, null);
+    			}
     		},
 
     		p: function update(changed, ctx) {
+    			if (changed.pathsDrop || changed.pathdrop) {
+    				each_value_1 = ctx.pathsDrop;
+
+    				let i;
+    				for (i = 0; i < each_value_1.length; i += 1) {
+    					const child_ctx = get_each_context_1(ctx, each_value_1, i);
+
+    					if (each_blocks_1[i]) {
+    						each_blocks_1[i].p(changed, child_ctx);
+    					} else {
+    						each_blocks_1[i] = create_each_block_1(child_ctx);
+    						each_blocks_1[i].c();
+    						each_blocks_1[i].m(svg, each0_anchor);
+    					}
+    				}
+
+    				for (; i < each_blocks_1.length; i += 1) {
+    					each_blocks_1[i].d(1);
+    				}
+    				each_blocks_1.length = each_value_1.length;
+    			}
+
+    			if (changed.pathsDrag) {
+    				each_value = ctx.pathsDrag;
+
+    				let i;
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(changed, child_ctx);
+    					} else {
+    						each_blocks[i] = create_each_block(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(svg, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+    				each_blocks.length = each_value.length;
+    			}
+
     			if ((changed.width || changed.height) && svg_viewBox_value !== (svg_viewBox_value = `0 0 ${ctx.width} ${ctx.height}`)) {
     				attr_dev(svg, "viewBox", svg_viewBox_value);
     			}
@@ -10155,6 +10259,10 @@ var app = (function () {
     			if (detaching) {
     				detach_dev(section);
     			}
+
+    			destroy_each(each_blocks_1, detaching);
+
+    			destroy_each(each_blocks, detaching);
     		}
     	};
     	dispatch_dev("SvelteRegisterBlock", { block, id: create_fragment.name, type: "component", source: "", ctx });
@@ -10165,7 +10273,75 @@ var app = (function () {
 
     function instance($$self, $$props, $$invalidate) {
     	
+    const resize = () => {
+      window.onresize = (e) => {
+        $$invalidate('width', width = e.target.innerWidth);
+        $$invalidate('height', height = e.target.innerHeight);
+      };
+    };
+    // PATHS:
+    const pathsDrop = [
+      {
+        id: "circulo-area",
+        class: "drop-1 dropall",
+        d: "M532.65 254.94C532.65 352.36 453.56 431.45 356.14 431.45C258.73 431.45 179.64 352.36 179.64 254.94C179.64 157.52 258.73 78.43 356.14 78.43C453.56 78.43 532.65 157.52 532.65 254.94Z",
+        opacity:"1",
+        fill: "#651e48"
+      },
+      {
+        id: "triangulo-area",
+        class: "drop-2 dropall",
+        d: "M426.63 374.82L180.84 377.23L300.12 86.87L426.63 374.82Z",
+        opacity:"1",
+        fill: "#651e48"
+      },
+      {
+        id: "irregular-area",
+        class: "drop-3 dropall",
+        d: "M473.61 66.39L437.47 172.41L433.86 219.4L324.22 239.88L403.73 272.41L349.52 285.66L339.88 342.29L282.05 304.94L274.82 355.54L236.27 300.12L207.35 219.4L232.65 133.86L473.61 66.39Z",
+        opacity:"1",
+        fill: "#651e48"
+      },
+      {
+        id: "cuadrado-area",
+        class: "drop-4 dropall",
+        d: "M112.17 79.64L495.3 79.64L495.3 459.16L112.17 459.16L112.17 79.64Z",
+        opacity:"1",
+        fill: "#651e48"
+      }
+    ];
+    const pathsDrag = [
+      {
+        id: "circulo-drag",
+        class: "dragall",
+        d: "M532.65 254.94C532.65 352.36 453.56 431.45 356.14 431.45C258.73 431.45 179.64 352.36 179.64 254.94C179.64 157.52 258.73 78.43 356.14 78.43C453.56 78.43 532.65 157.52 532.65 254.94Z",
+        opacity:"1",
+        fill: "#659f18"
+      },
+      {
+        id: "triangulo-drag",
+        class: "dragall",
+        d: "M426.63 374.82L180.84 377.23L300.12 86.87L426.63 374.82Z",
+        opacity:"1",
+        fill: "#659f18"
+      },
+      {
+        id: "irregular-drag",
+        class: "dragall",
+        d: "M473.61 66.39L437.47 172.41L433.86 219.4L324.22 239.88L403.73 272.41L349.52 285.66L339.88 342.29L282.05 304.94L274.82 355.54L236.27 300.12L207.35 219.4L232.65 133.86L473.61 66.39Z",
+        opacity:"1",
+        fill: "#659f18"
+      },
+      {
+        id: "cuadrado-drag",
+        class: "dragall",
+        d: "M112.17 79.64L495.3 79.64L495.3 459.16L112.17 459.16L112.17 79.64Z",
+        opacity:"1",
+        fill: "#659f18"
+      }
+    ];
 
+    //
     const Drag = () => {
       interact$1(itemDrag).draggable({
         inertia: true,
@@ -10207,15 +10383,25 @@ var app = (function () {
       target.setAttribute('data-x', x);
       target.setAttribute('data-y', y);
     };
+    let pathdrop;
     //llamadas
+    resize();
     Drag();
     // Drop()
+    //
+
+    	function path_binding($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			$$invalidate('pathdrop', pathdrop = $$value);
+    		});
+    	}
 
     	$$self.$capture_state = () => {
     		return {};
     	};
 
     	$$self.$inject_state = $$props => {
+    		if ('pathdrop' in $$props) $$invalidate('pathdrop', pathdrop = $$props.pathdrop);
     		if ('width' in $$props) $$invalidate('width', width = $$props.width);
     		if ('height' in $$props) $$invalidate('height', height = $$props.height);
     	};
@@ -10225,7 +10411,14 @@ var app = (function () {
     	$$invalidate('width', width = window.innerWidth);
     	$$invalidate('height', height = window.innerHeight);
 
-    	return { width, height };
+    	return {
+    		pathsDrop,
+    		pathsDrag,
+    		pathdrop,
+    		width,
+    		height,
+    		path_binding
+    	};
     }
 
     class DragDrop extends SvelteComponentDev {
