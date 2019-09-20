@@ -11,12 +11,12 @@ const resize = () => {
   }
 }
 const itemDrag = '.dragall'
-// colores
-const colorDrag = 'red'
-const colorDragging = 'pink'
+// colores paths
+const colorDrag = 'orange'
+const colorDragging = 'lime'
 const colorArea = 'purple'
+const colorEnterArea = 'lightgray'
 const colorSnapped = 'gray'
-
 // PATHS:
 const pathsDrop = [
   {
@@ -78,7 +78,6 @@ const pathsDrag = [
     fill: colorDrag
   }
 ]
-
 //
 const Drag = () => {
   interact(itemDrag).draggable({
@@ -122,79 +121,46 @@ const dragMoveListener = (event) => {
   target.setAttribute('data-y', y)
 }
 //
-// Posicion Drop Areas
-const dropPos = [
-  {x:0, y: 0},
-  {x:0, y: 0},
-  {x:0, y: 0},
-  {x:0, y: 0}
-]
-//
 const Drop = (interactObj, acceptObj) => {
 
-  let iObj = document.querySelector(interactObj)
-  console.log(iObj)
-  // DEBUG: refactorizar
-  //   const obj = document.querySelector(acceptObj)
-  //   const contObj = document.querySelector(interactObj)
-  //   const pathObj = document.querySelector(acceptObj).querySelector('path')
-  //
-  //   pathObj.style.fill = colorObj
-  //
-  //   //
-  //   const info = document.querySelector('.info')
-  //   //
   interact(interactObj).dropzone({
     accept: acceptObj,
-    //     // Requiere el 15% del elemento para ejercer el 'drop'
-    overlap: 0.15,
-    //     // Eventos relacionados al 'drop':
+    overlap: 0.20,
+    // Eventos relacionados al 'drop':
     ondropactivate: (event) => {
-      // event.target.querySelector('path').style.fill = colorAreaActive
-      // event.relatedTarget.querySelector('path').style.fill = colorAreaActive
-      // event.target.style.fill = 'red'// area
-      // event.relatedTarget.style.fill = 'lime'//dragged obj
-      console.log("ondropactive: ",event)
+      event.target.style.fill = colorDragging// area
+      event.relatedTarget.style.fill = colorDragging//dragged obj
     },
     //     //al entrar en zona de 'drop'
     ondragenter: (event) => {
-      //       event.target.querySelector('path').style.fill = colorObjDropped
-      //       info.innerHTML = "DEBUG: ondragenter"
-      event.target.style.fill = 'red'// area
-      event.relatedTarget.style.fill = 'lime'//dragged obj
-      // console.log("ondragenter")
+      event.target.style.fill = colorEnterArea
+      event.relatedTarget.style.fill = colorEnterArea
     },
     //     //al soltarlo dentro de la zona de 'drop'
     ondrop: (event) => {
-      //       let dropzone = event.target.getBoundingClientRect()
-      //       // // snap
-      //       obj.style.webkitTransform =
-      //       obj.style.transform =
-      //       'translate(' + dropzone.x + 'px, ' + dropzone.y    + 'px)'
-      //       //
-      //       obj.setAttribute('data-x', dropzone.x)
-      //       obj.setAttribute('data-y', dropzone.y)
+      let dropzone = event.target.getBoundingClientRect()
+      let obj = event.relatedTarget
+      // snap
+      obj.style.webkitTransform =
+      obj.style.transform =
+      'translate(' + dropzone.left + 'px, ' + dropzone.bottom    + 'px)'
       //
-      //       info.innerHTML = "DEBUG: ondrop"
-      // console.log("ondrop")
+      obj.setAttribute('data-x', dropzone.left)
+      obj.setAttribute('data-y', dropzone.bottom)
+      console.log(dropzone)
+      console.log(dropzone.x)
+      console.log(dropzone.y)
     },
     //     //Al salir del 'dropzone'
     ondragleave: (event) => {
-      //       event.target.querySelector('path').style.fill = colorAreaActive
-      //       info.innerHTML = "DEBUG: ondragleave"
-      event.target.style.fill = 'purple'// area
-      event.relatedTarget.style.fill = 'green'//dragged obj
-      // console.log("ondrop")
+      event.target.style.fill = colorArea
+      event.relatedTarget.style.fill = colorDrag
     },
-    //     // Al dejar fuera de la zona de 'drop'
-        ondropdeactivate: (event) => {
-    //       event.target.querySelector('path').style.fill = colorArea
-    //       event.relatedTarget.querySelector('path').style.fill = colorObj
-    //       info.innerHTML = "DEBUG: ondropdeactivate"
-    event.target.style.fill = 'purple'// area
-    event.relatedTarget.style.fill = 'green'//dragged obj
-    // console.log("ondropdeactivate")
-        }
+    // Al dejar fuera de la zona de 'drop'
+    ondropdeactivate: (event) => {
+      event.target.style.fill = colorArea// area
+      event.relatedTarget.style.fill = colorDrag//dragged obj
+    }
   })
 }
 //llamadas

@@ -10062,7 +10062,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (276:0) {#each pathsDrop as path}
+    // (242:0) {#each pathsDrop as path}
     function create_each_block_1(ctx) {
     	var path;
 
@@ -10074,7 +10074,7 @@ var app = (function () {
     			attr_dev(path, "class", "" + ctx.path.class + " svelte-1sqdqz3");
     			attr_dev(path, "opacity", ctx.path.opacity);
     			attr_dev(path, "fill", ctx.path.fill);
-    			add_location(path, file, 276, 0, 7264);
+    			add_location(path, file, 242, 0, 5913);
     		},
 
     		m: function mount(target, anchor) {
@@ -10089,11 +10089,11 @@ var app = (function () {
     			}
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_1.name, type: "each", source: "(276:0) {#each pathsDrop as path}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_1.name, type: "each", source: "(242:0) {#each pathsDrop as path}", ctx });
     	return block;
     }
 
-    // (288:0) {#each pathsDrag as path}
+    // (254:0) {#each pathsDrag as path}
     function create_each_block(ctx) {
     	var path;
 
@@ -10105,7 +10105,7 @@ var app = (function () {
     			attr_dev(path, "class", "" + ctx.path.class + " svelte-1sqdqz3");
     			attr_dev(path, "opacity", ctx.path.opacity);
     			attr_dev(path, "fill", ctx.path.fill);
-    			add_location(path, file, 288, 0, 7418);
+    			add_location(path, file, 254, 0, 6067);
     		},
 
     		m: function mount(target, anchor) {
@@ -10120,7 +10120,7 @@ var app = (function () {
     			}
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block.name, type: "each", source: "(288:0) {#each pathsDrag as path}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block.name, type: "each", source: "(254:0) {#each pathsDrag as path}", ctx });
     	return block;
     }
 
@@ -10166,9 +10166,9 @@ var app = (function () {
     			attr_dev(svg, "width", svg_width_value = `${ctx.width}px`);
     			attr_dev(svg, "height", svg_height_value = `${ctx.height}px`);
     			attr_dev(svg, "class", "svelte-1sqdqz3");
-    			add_location(svg, file, 268, 0, 6983);
+    			add_location(svg, file, 234, 0, 5632);
     			attr_dev(section, "class", "svelte-1sqdqz3");
-    			add_location(section, file, 266, 0, 6963);
+    			add_location(section, file, 232, 0, 5612);
     		},
 
     		l: function claim(nodes) {
@@ -10267,9 +10267,13 @@ var app = (function () {
 
     const itemDrag = '.dragall';
 
-    const colorDrag = 'red';
+    const colorDrag = 'orange';
+
+    const colorDragging = 'lime';
 
     const colorArea = 'purple';
+
+    const colorEnterArea = 'lightgray';
 
     function instance($$self, $$props, $$invalidate) {
     	
@@ -10279,7 +10283,6 @@ var app = (function () {
         $$invalidate('height', height = e.target.innerHeight);
       };
     };
-
     // PATHS:
     const pathsDrop = [
       {
@@ -10341,7 +10344,6 @@ var app = (function () {
         fill: colorDrag
       }
     ];
-
     //
     const Drag = () => {
       interact$1(itemDrag).draggable({
@@ -10387,69 +10389,44 @@ var app = (function () {
     //
     const Drop = (interactObj, acceptObj) => {
 
-      let iObj = document.querySelector(interactObj);
-      console.log(iObj);
-      // DEBUG: refactorizar
-      //   const obj = document.querySelector(acceptObj)
-      //   const contObj = document.querySelector(interactObj)
-      //   const pathObj = document.querySelector(acceptObj).querySelector('path')
-      //
-      //   pathObj.style.fill = colorObj
-      //
-      //   //
-      //   const info = document.querySelector('.info')
-      //   //
       interact$1(interactObj).dropzone({
         accept: acceptObj,
-        //     // Requiere el 15% del elemento para ejercer el 'drop'
-        overlap: 0.15,
-        //     // Eventos relacionados al 'drop':
+        overlap: 0.20,
+        // Eventos relacionados al 'drop':
         ondropactivate: (event) => {
-          // event.target.querySelector('path').style.fill = colorAreaActive
-          // event.relatedTarget.querySelector('path').style.fill = colorAreaActive
-          // event.target.style.fill = 'red'// area
-          // event.relatedTarget.style.fill = 'lime'//dragged obj
-          console.log("ondropactive: ",event);
+          event.target.style.fill = colorDragging;// area
+          event.relatedTarget.style.fill = colorDragging;//dragged obj
         },
         //     //al entrar en zona de 'drop'
         ondragenter: (event) => {
-          //       event.target.querySelector('path').style.fill = colorObjDropped
-          //       info.innerHTML = "DEBUG: ondragenter"
-          event.target.style.fill = 'red';// area
-          event.relatedTarget.style.fill = 'lime';//dragged obj
-          // console.log("ondragenter")
+          event.target.style.fill = colorEnterArea;
+          event.relatedTarget.style.fill = colorEnterArea;
         },
         //     //al soltarlo dentro de la zona de 'drop'
         ondrop: (event) => {
-          //       let dropzone = event.target.getBoundingClientRect()
-          //       // // snap
-          //       obj.style.webkitTransform =
-          //       obj.style.transform =
-          //       'translate(' + dropzone.x + 'px, ' + dropzone.y    + 'px)'
-          //       //
-          //       obj.setAttribute('data-x', dropzone.x)
-          //       obj.setAttribute('data-y', dropzone.y)
+          let dropzone = event.target.getBoundingClientRect();
+          let obj = event.relatedTarget;
+          // snap
+          obj.style.webkitTransform =
+          obj.style.transform =
+          'translate(' + dropzone.left + 'px, ' + dropzone.bottom    + 'px)';
           //
-          //       info.innerHTML = "DEBUG: ondrop"
-          // console.log("ondrop")
+          obj.setAttribute('data-x', dropzone.left);
+          obj.setAttribute('data-y', dropzone.bottom);
+          console.log(dropzone);
+          console.log(dropzone.x);
+          console.log(dropzone.y);
         },
         //     //Al salir del 'dropzone'
         ondragleave: (event) => {
-          //       event.target.querySelector('path').style.fill = colorAreaActive
-          //       info.innerHTML = "DEBUG: ondragleave"
-          event.target.style.fill = 'purple';// area
-          event.relatedTarget.style.fill = 'green';//dragged obj
-          // console.log("ondrop")
+          event.target.style.fill = colorArea;
+          event.relatedTarget.style.fill = colorDrag;
         },
-        //     // Al dejar fuera de la zona de 'drop'
-            ondropdeactivate: (event) => {
-        //       event.target.querySelector('path').style.fill = colorArea
-        //       event.relatedTarget.querySelector('path').style.fill = colorObj
-        //       info.innerHTML = "DEBUG: ondropdeactivate"
-        event.target.style.fill = 'purple';// area
-        event.relatedTarget.style.fill = 'green';//dragged obj
-        // console.log("ondropdeactivate")
-            }
+        // Al dejar fuera de la zona de 'drop'
+        ondropdeactivate: (event) => {
+          event.target.style.fill = colorArea;// area
+          event.relatedTarget.style.fill = colorDrag;//dragged obj
+        }
       });
     };
     //llamadas
