@@ -1,6 +1,5 @@
 <script>
 import interact from 'interactjs'
-// import './DragDrop.css'
 //
 $: width = window.innerWidth
 $: height = window.innerHeight
@@ -79,7 +78,7 @@ const pathsDrag = [
   }
 ]
 //
-const Drag = () => {
+const configuraDrag = () => {
   interact(itemDrag).draggable({
     inertia: true,
     modifiers: [
@@ -115,7 +114,7 @@ const dragMoveListener = (e) => {
   target.setAttribute('data-y', y)
 }
 //
-const Drop = (interactObj, acceptObj) => {
+const configuraDrop = (interactObj, acceptObj) => {
 
   interact(interactObj).dropzone({
     accept: acceptObj,
@@ -134,8 +133,8 @@ const Drop = (interactObj, acceptObj) => {
     ondrop: (e) => {
       let dropzone = e.target.getBoundingClientRect()
       let obj = e.relatedTarget
-      let x = dropzone.x*0.001
-      let y = dropzone.y*0.001
+      let x = 0//dropzone.x
+      let y = 0//dropzone.y
       // snap
       obj.style.webkitTransform =
       obj.style.transform =
@@ -158,23 +157,17 @@ const Drop = (interactObj, acceptObj) => {
   })
 }
 
-function areaPos(e) {
-  console.log(e);
-}
 //llamadas
 resize()
-Drag()
-Drop("#cuadrado-area",'#cuadrado-drag')
-Drop("#triangulo-area",'#triangulo-drag')
-Drop("#irregular-area",'#irregular-drag')
-Drop("#circulo-area",'#circulo-drag')
+configuraDrag()
+configuraDrop("#cuadrado-area",'#cuadrado-drag')
+configuraDrop("#triangulo-area",'#triangulo-drag')
+configuraDrop("#irregular-area",'#irregular-drag')
+configuraDrop("#circulo-area",'#circulo-drag')
 //
 </script>
 <!-- Estilos -->
 <style>
-* {
-  /* outline: 1px solid black; */
-}
 #svg-contenedor {
   height: 100vh;
   width: 100vw;
@@ -183,38 +176,34 @@ Drop("#circulo-area",'#circulo-drag')
 <!-- HTML  -->
 <section>
 <!--  -->
+
 <svg id="svg-contenedor" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 viewBox={`0 0 ${width} ${height}`}
 width={`${width}px`}
 height={`${height}px`}
 >
 <!-- Drops Areas -->
-{#each pathsDrop as path}
-
-<!-- on:create={areaPos()} -->
-<path
-on:create={event => created = event.target}
-d={path.d}
-id={path.id}
-class={path.class}
-opacity={path.opacity}
-fill={path.fill}
-></path>
-
-{/each}
+  {#each pathsDrop as path}
+    <path
+    on:create={e => console.log(e.target)}
+    d={path.d}
+    id={path.id}
+    class={path.class}
+    opacity={path.opacity}
+    fill={path.fill}
+    ></path>
+  {/each}
 
 <!-- draggables -->
-{#each pathsDrag as path}
-
-<path
-d={path.d}
-id={path.id}
-class={path.class}
-opacity={path.opacity}
-fill={path.fill}
-></path>
-
-{/each}
+  {#each pathsDrag as path}
+    <path
+    d={path.d}
+    id={path.id}
+    class={path.class}
+    opacity={path.opacity}
+    fill={path.fill}
+    ></path>
+  {/each}
 
 </svg>
 

@@ -10079,7 +10079,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (192:0) {#each pathsDrop as path}
+    // (186:2) {#each pathsDrop as path}
     function create_each_block_1(ctx) {
     	var path, dispose;
 
@@ -10088,10 +10088,10 @@ var app = (function () {
     			path = svg_element("path");
     			attr_dev(path, "d", ctx.path.d);
     			attr_dev(path, "id", ctx.path.id);
-    			attr_dev(path, "class", "" + ctx.path.class + " svelte-719o7u");
+    			attr_dev(path, "class", "" + ctx.path.class + " svelte-h9lux4");
     			attr_dev(path, "opacity", ctx.path.opacity);
     			attr_dev(path, "fill", ctx.path.fill);
-    			add_location(path, file, 194, 0, 5163);
+    			add_location(path, file, 186, 4, 5086);
     			dispose = listen_dev(path, "create", ctx.create_handler);
     		},
 
@@ -10109,11 +10109,11 @@ var app = (function () {
     			dispose();
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_1.name, type: "each", source: "(192:0) {#each pathsDrop as path}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_1.name, type: "each", source: "(186:2) {#each pathsDrop as path}", ctx });
     	return block;
     }
 
-    // (207:0) {#each pathsDrag as path}
+    // (198:2) {#each pathsDrag as path}
     function create_each_block(ctx) {
     	var path;
 
@@ -10122,10 +10122,10 @@ var app = (function () {
     			path = svg_element("path");
     			attr_dev(path, "d", ctx.path.d);
     			attr_dev(path, "id", ctx.path.id);
-    			attr_dev(path, "class", "" + ctx.path.class + " svelte-719o7u");
+    			attr_dev(path, "class", "" + ctx.path.class + " svelte-h9lux4");
     			attr_dev(path, "opacity", ctx.path.opacity);
     			attr_dev(path, "fill", ctx.path.fill);
-    			add_location(path, file, 208, 0, 5362);
+    			add_location(path, file, 198, 4, 5314);
     		},
 
     		m: function mount(target, anchor) {
@@ -10140,7 +10140,7 @@ var app = (function () {
     			}
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block.name, type: "each", source: "(207:0) {#each pathsDrag as path}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block.name, type: "each", source: "(198:2) {#each pathsDrag as path}", ctx });
     	return block;
     }
 
@@ -10184,10 +10184,9 @@ var app = (function () {
     			attr_dev(svg, "viewBox", svg_viewBox_value = `0 0 ${ctx.width} ${ctx.height}`);
     			attr_dev(svg, "width", svg_width_value = `${ctx.width}px`);
     			attr_dev(svg, "height", svg_height_value = `${ctx.height}px`);
-    			attr_dev(svg, "class", "svelte-719o7u");
-    			add_location(svg, file, 185, 0, 4886);
-    			attr_dev(section, "class", "svelte-719o7u");
-    			add_location(section, file, 183, 0, 4866);
+    			attr_dev(svg, "class", "svelte-h9lux4");
+    			add_location(svg, file, 179, 0, 4835);
+    			add_location(section, file, 176, 0, 4814);
     		},
 
     		l: function claim(nodes) {
@@ -10366,7 +10365,7 @@ var app = (function () {
       }
     ];
     //
-    const Drag = () => {
+    const configuraDrag = () => {
       interact$1(itemDrag).draggable({
         inertia: true,
         modifiers: [
@@ -10402,7 +10401,7 @@ var app = (function () {
       target.setAttribute('data-y', y);
     };
     //
-    const Drop = (interactObj, acceptObj) => {
+    const configuraDrop = (interactObj, acceptObj) => {
 
       interact$1(interactObj).dropzone({
         accept: acceptObj,
@@ -10421,8 +10420,8 @@ var app = (function () {
         ondrop: (e) => {
           let dropzone = e.target.getBoundingClientRect();
           let obj = e.relatedTarget;
-          let x = dropzone.x*0.001;
-          let y = dropzone.y*0.001;
+          let x = 0;//dropzone.x
+          let y = 0;//dropzone.y
           // snap
           obj.style.webkitTransform =
           obj.style.transform =
@@ -10444,16 +10443,17 @@ var app = (function () {
         }
       });
     };
+
     //llamadas
     resize();
-    Drag();
-    Drop("#cuadrado-area",'#cuadrado-drag');
-    Drop("#triangulo-area",'#triangulo-drag');
-    Drop("#irregular-area",'#irregular-drag');
-    Drop("#circulo-area",'#circulo-drag');
+    configuraDrag();
+    configuraDrop("#cuadrado-area",'#cuadrado-drag');
+    configuraDrop("#triangulo-area",'#triangulo-drag');
+    configuraDrop("#irregular-area",'#irregular-drag');
+    configuraDrop("#circulo-area",'#circulo-drag');
     //
 
-    	const create_handler = (event) => created = event.target;
+    	const create_handler = (e) => console.log(e.target);
 
     	$$self.$capture_state = () => {
     		return {};
@@ -10474,6 +10474,7 @@ var app = (function () {
     		pathsDrag,
     		width,
     		height,
+    		console,
     		create_handler
     	};
     }
