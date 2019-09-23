@@ -46,12 +46,6 @@ var app = (function () {
     function svg_element(name) {
         return document.createElementNS('http://www.w3.org/2000/svg', name);
     }
-    function text(data) {
-        return document.createTextNode(data);
-    }
-    function empty() {
-        return text('');
-    }
     function listen(node, event, handler, options) {
         node.addEventListener(event, handler, options);
         return () => node.removeEventListener(event, handler, options);
@@ -10073,14 +10067,8 @@ var app = (function () {
     	return child_ctx;
     }
 
-    function get_each_context_1(ctx, list, i) {
-    	const child_ctx = Object.create(ctx);
-    	child_ctx.path = list[i];
-    	return child_ctx;
-    }
-
-    // (186:2) {#each pathsDrop as path}
-    function create_each_block_1(ctx) {
+    // (184:2) {#each paths as path}
+    function create_each_block(ctx) {
     	var path, dispose;
 
     	const block = {
@@ -10088,10 +10076,10 @@ var app = (function () {
     			path = svg_element("path");
     			attr_dev(path, "d", ctx.path.d);
     			attr_dev(path, "id", ctx.path.id);
-    			attr_dev(path, "class", "" + ctx.path.class + " svelte-h9lux4");
+    			attr_dev(path, "class", "" + ctx.path.class + " svelte-ja5vxq");
     			attr_dev(path, "opacity", ctx.path.opacity);
     			attr_dev(path, "fill", ctx.path.fill);
-    			add_location(path, file, 186, 4, 5086);
+    			add_location(path, file, 184, 4, 5092);
     			dispose = listen_dev(path, "create", ctx.create_handler);
     		},
 
@@ -10109,53 +10097,14 @@ var app = (function () {
     			dispose();
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_1.name, type: "each", source: "(186:2) {#each pathsDrop as path}", ctx });
-    	return block;
-    }
-
-    // (198:2) {#each pathsDrag as path}
-    function create_each_block(ctx) {
-    	var path;
-
-    	const block = {
-    		c: function create() {
-    			path = svg_element("path");
-    			attr_dev(path, "d", ctx.path.d);
-    			attr_dev(path, "id", ctx.path.id);
-    			attr_dev(path, "class", "" + ctx.path.class + " svelte-h9lux4");
-    			attr_dev(path, "opacity", ctx.path.opacity);
-    			attr_dev(path, "fill", ctx.path.fill);
-    			add_location(path, file, 198, 4, 5314);
-    		},
-
-    		m: function mount(target, anchor) {
-    			insert_dev(target, path, anchor);
-    		},
-
-    		p: noop,
-
-    		d: function destroy(detaching) {
-    			if (detaching) {
-    				detach_dev(path);
-    			}
-    		}
-    	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block.name, type: "each", source: "(198:2) {#each pathsDrag as path}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block.name, type: "each", source: "(184:2) {#each paths as path}", ctx });
     	return block;
     }
 
     function create_fragment(ctx) {
-    	var section, svg, each0_anchor, svg_viewBox_value, svg_width_value, svg_height_value;
+    	var section, svg, svg_viewBox_value, svg_width_value, svg_height_value;
 
-    	let each_value_1 = ctx.pathsDrop;
-
-    	let each_blocks_1 = [];
-
-    	for (let i = 0; i < each_value_1.length; i += 1) {
-    		each_blocks_1[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
-    	}
-
-    	let each_value = ctx.pathsDrag;
+    	let each_value = ctx.paths;
 
     	let each_blocks = [];
 
@@ -10168,12 +10117,6 @@ var app = (function () {
     			section = element("section");
     			svg = svg_element("svg");
 
-    			for (let i = 0; i < each_blocks_1.length; i += 1) {
-    				each_blocks_1[i].c();
-    			}
-
-    			each0_anchor = empty();
-
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
     			}
@@ -10184,9 +10127,10 @@ var app = (function () {
     			attr_dev(svg, "viewBox", svg_viewBox_value = `0 0 ${ctx.width} ${ctx.height}`);
     			attr_dev(svg, "width", svg_width_value = `${ctx.width}px`);
     			attr_dev(svg, "height", svg_height_value = `${ctx.height}px`);
-    			attr_dev(svg, "class", "svelte-h9lux4");
-    			add_location(svg, file, 179, 0, 4835);
-    			add_location(section, file, 176, 0, 4814);
+    			attr_dev(svg, "class", "svelte-ja5vxq");
+    			add_location(svg, file, 177, 0, 4845);
+    			attr_dev(section, "class", "svelte-ja5vxq");
+    			add_location(section, file, 174, 0, 4824);
     		},
 
     		l: function claim(nodes) {
@@ -10197,42 +10141,14 @@ var app = (function () {
     			insert_dev(target, section, anchor);
     			append_dev(section, svg);
 
-    			for (let i = 0; i < each_blocks_1.length; i += 1) {
-    				each_blocks_1[i].m(svg, null);
-    			}
-
-    			append_dev(svg, each0_anchor);
-
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].m(svg, null);
     			}
     		},
 
     		p: function update(changed, ctx) {
-    			if (changed.pathsDrop) {
-    				each_value_1 = ctx.pathsDrop;
-
-    				let i;
-    				for (i = 0; i < each_value_1.length; i += 1) {
-    					const child_ctx = get_each_context_1(ctx, each_value_1, i);
-
-    					if (each_blocks_1[i]) {
-    						each_blocks_1[i].p(changed, child_ctx);
-    					} else {
-    						each_blocks_1[i] = create_each_block_1(child_ctx);
-    						each_blocks_1[i].c();
-    						each_blocks_1[i].m(svg, each0_anchor);
-    					}
-    				}
-
-    				for (; i < each_blocks_1.length; i += 1) {
-    					each_blocks_1[i].d(1);
-    				}
-    				each_blocks_1.length = each_value_1.length;
-    			}
-
-    			if (changed.pathsDrag) {
-    				each_value = ctx.pathsDrag;
+    			if (changed.paths) {
+    				each_value = ctx.paths;
 
     				let i;
     				for (i = 0; i < each_value.length; i += 1) {
@@ -10274,8 +10190,6 @@ var app = (function () {
     				detach_dev(section);
     			}
 
-    			destroy_each(each_blocks_1, detaching);
-
     			destroy_each(each_blocks, detaching);
     		}
     	};
@@ -10304,62 +10218,60 @@ var app = (function () {
       };
     };
     // PATHS:
-    const pathsDrop = [
+    const paths = [
       {
         id: "circulo-area",
         class: "drop-1 dropall",
-        d: "M532.65 254.94C532.65 352.36 453.56 431.45 356.14 431.45C258.73 431.45 179.64 352.36 179.64 254.94C179.64 157.52 258.73 78.43 356.14 78.43C453.56 78.43 532.65 157.52 532.65 254.94Z",
+        d: "M232.65 554.94C232.65 652.36 653.56 531.45 456.14 531.45C258.73 531.45 379.64 552.36 379.64 554.94C279.64 257.52 258.73 178.43 356.14 378.43C453.56 178.43 232.65 457.52 232.65 554.94Z",
         opacity:"1",
         fill: colorArea
       },
       {
         id: "triangulo-area",
         class: "drop-2 dropall",
-        d: "M426.63 374.82L180.84 377.23L300.12 86.87L426.63 374.82Z",
+        d: "M284.42 249.88L120.56 251.48L200.08 57.91L284.42 249.88Z",
         opacity:"1",
         fill: colorArea
       },
       {
         id: "irregular-area",
         class: "drop-3 dropall",
-        d: "M473.61 66.39L437.47 172.41L433.86 219.4L324.22 239.88L403.73 272.41L349.52 285.66L339.88 342.29L282.05 304.94L274.82 355.54L236.27 300.12L207.35 219.4L232.65 133.86L473.61 66.39Z",
+        d: "M236.805 33.195L218.735 86.205L216.93 109.7L162.11 119.94L201.865 136.205L174.76 142.83L169.94 171.145L141.025 152.47L137.41 177.77L118.135 150.06L103.675 109.7L116.325 66.93L236.805 33.195Z",
         opacity:"1",
         fill: colorArea
       },
       {
         id: "cuadrado-area",
         class: "drop-4 dropall",
-        d: "M112.17 79.64L495.3 79.64L495.3 459.16L112.17 459.16L112.17 79.64Z",
+        d: "M28.042 19.91L123.8 19.91L123.8 114.79L28.042 114.79L28.042 19.91Z",
         opacity:"1",
         fill: colorArea
-      }
-    ];
-    const pathsDrag = [
+      },
       {
         id: "circulo-drag",
         class: "dragall",
-        d: "M532.65 254.94C532.65 352.36 453.56 431.45 356.14 431.45C258.73 431.45 179.64 352.36 179.64 254.94C179.64 157.52 258.73 78.43 356.14 78.43C453.56 78.43 532.65 157.52 532.65 254.94Z",
+        d: "M232.65 554.94C232.65 652.36 653.56 531.45 456.14 531.45C258.73 531.45 379.64 552.36 379.64 554.94C279.64 257.52 258.73 178.43 356.14 378.43C453.56 178.43 232.65 457.52 232.65 554.94Z",
         opacity:"1",
         fill: colorDrag
       },
       {
         id: "triangulo-drag",
         class: "dragall",
-        d: "M426.63 374.82L180.84 377.23L300.12 86.87L426.63 374.82Z",
+        d: "M284.42 249.88L120.56 251.48L200.08 57.91L284.42 249.88Z",
         opacity:"1",
         fill: colorDrag
       },
       {
         id: "irregular-drag",
         class: "dragall",
-        d: "M473.61 66.39L437.47 172.41L433.86 219.4L324.22 239.88L403.73 272.41L349.52 285.66L339.88 342.29L282.05 304.94L274.82 355.54L236.27 300.12L207.35 219.4L232.65 133.86L473.61 66.39Z",
+        d: "M236.805 33.195L218.735 86.205L216.93 109.7L162.11 119.94L201.865 136.205L174.76 142.83L169.94 171.145L141.025 152.47L137.41 177.77L118.135 150.06L103.675 109.7L116.325 66.93L236.805 33.195Z",
         opacity:"1",
         fill: colorDrag
       },
       {
         id: "cuadrado-drag",
         class: "dragall",
-        d: "M112.17 79.64L495.3 79.64L495.3 459.16L112.17 459.16L112.17 79.64Z",
+        d: "M28.042 19.91L123.8 19.91L123.8 114.79L28.042 114.79L28.042 19.91Z",
         opacity:"1",
         fill: colorDrag
       }
@@ -10470,8 +10382,7 @@ var app = (function () {
     	$$invalidate('height', height = window.innerHeight);
 
     	return {
-    		pathsDrop,
-    		pathsDrag,
+    		paths,
     		width,
     		height,
     		console,

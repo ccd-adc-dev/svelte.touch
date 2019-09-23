@@ -17,62 +17,60 @@ const colorArea = 'purple'
 const colorEnterArea = 'lightgray'
 const colorSnapped = 'gray'
 // PATHS:
-const pathsDrop = [
+const paths = [
   {
     id: "circulo-area",
     class: "drop-1 dropall",
-    d: "M532.65 254.94C532.65 352.36 453.56 431.45 356.14 431.45C258.73 431.45 179.64 352.36 179.64 254.94C179.64 157.52 258.73 78.43 356.14 78.43C453.56 78.43 532.65 157.52 532.65 254.94Z",
+    d: "M232.65 554.94C232.65 652.36 653.56 531.45 456.14 531.45C258.73 531.45 379.64 552.36 379.64 554.94C279.64 257.52 258.73 178.43 356.14 378.43C453.56 178.43 232.65 457.52 232.65 554.94Z",
     opacity:"1",
     fill: colorArea
   },
   {
     id: "triangulo-area",
     class: "drop-2 dropall",
-    d: "M426.63 374.82L180.84 377.23L300.12 86.87L426.63 374.82Z",
+    d: "M284.42 249.88L120.56 251.48L200.08 57.91L284.42 249.88Z",
     opacity:"1",
     fill: colorArea
   },
   {
     id: "irregular-area",
     class: "drop-3 dropall",
-    d: "M473.61 66.39L437.47 172.41L433.86 219.4L324.22 239.88L403.73 272.41L349.52 285.66L339.88 342.29L282.05 304.94L274.82 355.54L236.27 300.12L207.35 219.4L232.65 133.86L473.61 66.39Z",
+    d: "M236.805 33.195L218.735 86.205L216.93 109.7L162.11 119.94L201.865 136.205L174.76 142.83L169.94 171.145L141.025 152.47L137.41 177.77L118.135 150.06L103.675 109.7L116.325 66.93L236.805 33.195Z",
     opacity:"1",
     fill: colorArea
   },
   {
     id: "cuadrado-area",
     class: "drop-4 dropall",
-    d: "M112.17 79.64L495.3 79.64L495.3 459.16L112.17 459.16L112.17 79.64Z",
+    d: "M28.042 19.91L123.8 19.91L123.8 114.79L28.042 114.79L28.042 19.91Z",
     opacity:"1",
     fill: colorArea
-  }
-]
-const pathsDrag = [
+  },
   {
     id: "circulo-drag",
     class: "dragall",
-    d: "M532.65 254.94C532.65 352.36 453.56 431.45 356.14 431.45C258.73 431.45 179.64 352.36 179.64 254.94C179.64 157.52 258.73 78.43 356.14 78.43C453.56 78.43 532.65 157.52 532.65 254.94Z",
+    d: "M232.65 554.94C232.65 652.36 653.56 531.45 456.14 531.45C258.73 531.45 379.64 552.36 379.64 554.94C279.64 257.52 258.73 178.43 356.14 378.43C453.56 178.43 232.65 457.52 232.65 554.94Z",
     opacity:"1",
     fill: colorDrag
   },
   {
     id: "triangulo-drag",
     class: "dragall",
-    d: "M426.63 374.82L180.84 377.23L300.12 86.87L426.63 374.82Z",
+    d: "M284.42 249.88L120.56 251.48L200.08 57.91L284.42 249.88Z",
     opacity:"1",
     fill: colorDrag
   },
   {
     id: "irregular-drag",
     class: "dragall",
-    d: "M473.61 66.39L437.47 172.41L433.86 219.4L324.22 239.88L403.73 272.41L349.52 285.66L339.88 342.29L282.05 304.94L274.82 355.54L236.27 300.12L207.35 219.4L232.65 133.86L473.61 66.39Z",
+    d: "M236.805 33.195L218.735 86.205L216.93 109.7L162.11 119.94L201.865 136.205L174.76 142.83L169.94 171.145L141.025 152.47L137.41 177.77L118.135 150.06L103.675 109.7L116.325 66.93L236.805 33.195Z",
     opacity:"1",
     fill: colorDrag
   },
   {
     id: "cuadrado-drag",
     class: "dragall",
-    d: "M112.17 79.64L495.3 79.64L495.3 459.16L112.17 459.16L112.17 79.64Z",
+    d: "M28.042 19.91L123.8 19.91L123.8 114.79L28.042 114.79L28.042 19.91Z",
     opacity:"1",
     fill: colorDrag
   }
@@ -168,9 +166,9 @@ configuraDrop("#circulo-area",'#circulo-drag')
 </script>
 <!-- Estilos -->
 <style>
-#svg-contenedor {
-  height: 100vh;
-  width: 100vw;
+#svg-contenedor, section {
+  height: 100%;
+  width: 100%;
 }
 </style>
 <!-- HTML  -->
@@ -183,20 +181,9 @@ width={`${width}px`}
 height={`${height}px`}
 >
 <!-- Drops Areas -->
-  {#each pathsDrop as path}
+  {#each paths as path}
     <path
     on:create={e => console.log(e.target)}
-    d={path.d}
-    id={path.id}
-    class={path.class}
-    opacity={path.opacity}
-    fill={path.fill}
-    ></path>
-  {/each}
-
-<!-- draggables -->
-  {#each pathsDrag as path}
-    <path
     d={path.d}
     id={path.id}
     class={path.class}
